@@ -55,4 +55,6 @@ class Recipes {
       ],
     ),
   ];
+
+  int get recipeCount => recipes.length;
 }
