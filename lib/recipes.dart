@@ -54,35 +54,5 @@ class Recipes {
         'Angkat brownies dari panci pengukus dan biarkan dingin sebelum dipotong dan disajikan.'
       ],
     ),
-
-    // Add more recipes as needed
   ];
-
-  int _index = 0;
-
-  String getPertanyaan() {
-    return _bankSoal[_index].pertanyaan;
-  }
-
-  bool getJawaban() {
-    return _bankSoal[_index].jawaban;
-  }
-
-  void nextPertanyaan() {
-    if (_index < _bankSoal.length - 1) {
-      _index++;
-    }
-  }
-
-  bool selesai() {
-    if (_index > _bankSoal.length - 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void reset() {
-    _index = 0;
-  }
 }
