@@ -19,17 +19,26 @@ class RecipeDetailPage extends StatefulWidget {
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
   bool _isFavorite = false;
+  List<bool> _isStepCompletedList = [];
 
   @override
   void initState() {
     super.initState();
     _isFavorite = widget.isFavorite;
+    _isStepCompletedList =
+        List.generate(widget.recipe.instructions.length, (_) => false);
   }
 
   void _toggleFavorite() {
     setState(() {
       _isFavorite = !_isFavorite;
       widget.toggleFavorite(widget.recipe);
+    });
+  }
+
+  void _markStepAsCompleted(int index) {
+    setState(() {
+      _isStepCompletedList[index] = !_isStepCompletedList[index];
     });
   }
 
@@ -62,11 +71,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               ),
               SizedBox(height: 16),
               Text(
-                'Bahan:',
+                'Ingredients:',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.lightGreen.shade700,
                 ),
               ),
               SizedBox(height: 8),
@@ -82,11 +90,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               ),
               SizedBox(height: 16),
               Text(
-                'Langkah-langkah:',
+                'Instructions:',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.lightGreen.shade700,
                 ),
               ),
               SizedBox(height: 8),
@@ -94,15 +101,34 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(
                   widget.recipe.instructions.length,
-                  (index) => Text(
-                    '${index + 1}. ${widget.recipe.instructions[index]}',
-                    style: TextStyle(fontSize: 14),
+                  (index) => ListTile(
+                    contentPadding: EdgeInsets.all(0.5),
+                    leading: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: _isStepCompletedList[index]
+                          ? Colors.green
+                          : Colors.grey,
+                      child: _isStepCompletedList[index]
+                          ? Icon(Icons.check, color: Colors.white)
+                          : null,
+                    ),
+                    title: Padding(
+                      padding: EdgeInsets.only(
+                          left: 8), // Add left padding to the text
+                      child: Text(
+                        '${index + 1}. ${widget.recipe.instructions[index]}',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        _markStepAsCompleted(index);
+                      });
+                    },
                   ),
                 ),
               ),
-              SizedBox(
-                  height:
-                      80), // Add extra space for FAB to avoid overlapping content
+              SizedBox(height: 50),
             ],
           ),
         ),
